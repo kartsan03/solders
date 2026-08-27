@@ -84,6 +84,20 @@ impl RpcSendTransactionConfig {
     #[staticmethod]
     #[pyo3(name = "default")]
     pub fn new_default() -> Self {
-        Self::default()
+        Self::new(false, None, None, None)
+    }
+}
+
+impl RpcSendTransactionConfig {
+    /// Fill `encoding: base64` when the config is omitted or left unset.
+    ///
+    /// JSON-RPC `sendTransaction` defaults to base58 if encoding is missing, but solders
+    /// always serializes the payload as base64.
+    pub fn for_json_rpc(config: Option<Self>) -> Self {
+        let mut cfg = config.unwrap_or_else(|| Self::new(false, None, None, None));
+        if cfg.0.encoding.is_none() {
+            cfg.0.encoding = Some(UiTransactionEncodingOriginal::Base64);
+        }
+        cfg
     }
 }

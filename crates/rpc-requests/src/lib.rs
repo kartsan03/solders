@@ -2191,7 +2191,8 @@ impl SendVersionedTransaction {
         config: Option<RpcSendTransactionConfig>,
         id: Option<u64>,
     ) -> Self {
-        let params = SendTransactionParams(tx, config);
+        let params =
+            SendTransactionParams(tx, Some(RpcSendTransactionConfig::for_json_rpc(config)));
         let base = RequestBase::new(id);
         Self { base, params }
     }
@@ -2259,7 +2260,8 @@ impl SendLegacyTransaction {
     #[new]
     #[pyo3(signature = (tx, config=None, id=None))]
     fn new(tx: Transaction, config: Option<RpcSendTransactionConfig>, id: Option<u64>) -> Self {
-        let params = SendTransactionParams(tx, config);
+        let params =
+            SendTransactionParams(tx, Some(RpcSendTransactionConfig::for_json_rpc(config)));
         let base = RequestBase::new(id);
         Self { base, params }
     }
@@ -2326,7 +2328,8 @@ impl SendRawTransaction {
     #[new]
     #[pyo3(signature = (tx, config=None, id=None))]
     fn new(tx: Vec<u8>, config: Option<RpcSendTransactionConfig>, id: Option<u64>) -> Self {
-        let params = SendTransactionParams(tx, config);
+        let params =
+            SendTransactionParams(tx, Some(RpcSendTransactionConfig::for_json_rpc(config)));
         let base = RequestBase::new(id);
         Self { base, params }
     }
@@ -2396,7 +2399,8 @@ impl SimulateLegacyTransaction {
     #[new]
     #[pyo3(signature = (tx, config=None, id=None))]
     fn new(tx: Transaction, config: Option<RpcSimulateTransactionConfig>, id: Option<u64>) -> Self {
-        let params = SimulateTransactionParams(tx, config);
+        let params =
+            SimulateTransactionParams(tx, Some(RpcSimulateTransactionConfig::for_json_rpc(config)));
         let base = RequestBase::new(id);
         Self { base, params }
     }
@@ -2470,7 +2474,8 @@ impl SimulateVersionedTransaction {
         config: Option<RpcSimulateTransactionConfig>,
         id: Option<u64>,
     ) -> Self {
-        let params = SimulateTransactionParams(tx, config);
+        let params =
+            SimulateTransactionParams(tx, Some(RpcSimulateTransactionConfig::for_json_rpc(config)));
         let base = RequestBase::new(id);
         Self { base, params }
     }

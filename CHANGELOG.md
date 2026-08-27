@@ -1,5 +1,15 @@
 # Changelog
 
+# Unreleased
+
+### Fixed
+
+- `sendTransaction` / `simulateTransaction` request builders always advertise `encoding: "base64"` on the wire. The payload is serialized as base64 even when `config` is omitted, but JSON-RPC then defaults to base58 and the node rejects the request (`invalid base58 encoding`).
+
+### Changed
+
+- Omitting `config` on those builders now stores `Rpc*Config()` (so `req.config` is no longer `None`). `RpcSendTransactionConfig.default()` / `RpcSimulateTransactionConfig.default()` now match `Rpc*Config()` instead of leaving `encoding` unset.
+
 # [0.29.0] - 2026-08-13
 
 ### Added
