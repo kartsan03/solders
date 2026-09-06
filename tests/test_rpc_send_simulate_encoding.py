@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import json
 import pickle
-from typing import Any
+from typing import Any, List, Union, cast
 
 from solders.hash import Hash
 from solders.instruction import Instruction
@@ -60,7 +60,15 @@ def test_omitted_config_uses_python_ctor_defaults_with_base64() -> None:
     legacy = _legacy_tx()
     versioned = _versioned_tx()
     raw = bytes(legacy)
-    cases = [
+    cases: List[
+        Union[
+            SendLegacyTransaction,
+            SendVersionedTransaction,
+            SendRawTransaction,
+            SimulateLegacyTransaction,
+            SimulateVersionedTransaction,
+        ]
+    ] = [
         SendLegacyTransaction(legacy),
         SendVersionedTransaction(versioned),
         SendRawTransaction(raw),
@@ -73,7 +81,7 @@ def test_omitted_config_uses_python_ctor_defaults_with_base64() -> None:
         payload = json.loads(req.to_json())
         assert payload["method"] in {"sendTransaction", "simulateTransaction"}
         _assert_base64_payload(payload)
-        restored = type(req).from_bytes(bytes(req))
+        restored = cast(Any, type(req)).from_bytes(bytes(req))
         assert restored == req
         assert pickle.loads(pickle.dumps(req)) == req
 
